@@ -70,6 +70,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opa
 .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo .ghost{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:blur(14px);
   transform:translateX(-7%);mix-blend-mode:screen;pointer-events:none;animation:drift 6s ease-in-out infinite alternate}
+.photo .ghost.lean{mix-blend-mode:multiply;opacity:.32;filter:blur(10px);object-position:50% 18%}
 @keyframes drift{to{transform:translateX(-2%)}}
 .tag{position:absolute;top:var(--pad);font-family:"Oswald";font-weight:500;color:var(--red);
   font-size:clamp(18px,1.9vw,30px);letter-spacing:.01em;z-index:3;text-shadow:0 1px 0 rgba(12,26,53,.25)}
@@ -274,10 +275,10 @@ footer a:hover{color:var(--red)}
     <div class="bottom"><a class="cta" href="#contact">Book a shoot</a></div>
   </div>
   <div class="panel photo">
-    <img src="img/p201.jpg" alt="DJ at the decks, shot with a long exposure so the light streaks sideways" fetchpriority="high">
-    <img class="ghost" src="img/p201.jpg" alt="" aria-hidden="true">
-    <span class="tag l rv">She drops it.</span>
-    <span class="tag r rv">I catch it.</span>
+    <img src="img/p380.jpg" alt="Three dancers in silhouette on white stairs, leaning forward with a hand on their hats" fetchpriority="high" style="object-position:50% 18%">
+    <img class="ghost lean" src="img/p380.jpg" alt="" aria-hidden="true">
+    <span class="tag l rv">They lean.</span>
+    <span class="tag r rv">I hold it.</span>
     <!-- zigzag arrow, top right -->
     <svg class="scrawl draw" style="right:5%;top:11%;width:20%" viewBox="0 0 120 130" aria-hidden="true" filter="url(#rough)">
       <path stroke-width="5" d="M100 8 C 80 30, 40 26, 30 44 C 22 60, 70 58, 74 76 C 78 92, 46 100, 40 118"/>
@@ -406,7 +407,7 @@ const SERIES=[
   {t:"DJs",       c:"p200",s:["p200","p201","p203","p376","p377","p202","p204"]},
   {t:"Portraits", c:"p94", s:["p94","p84","p26","p43","p95","p40","p18","p41","p88"]},
   {t:"Couples",   c:"p449",s:["p449","p465","p451","p452","p448","p450"]},
-  {t:"Dance & sport",c:"p380",s:["p380","p381","p419","p420","p421","p422"]},
+  {t:"Dance & sport",c:"p381",s:["p380","p381","p419","p420","p421","p422"]},
   {t:"Events",    c:"p382",s:["p382","p383","p115","p116"]}
 ];
 const grid=document.getElementById('grid');
