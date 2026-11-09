@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catch the Peak</title>
+<meta name="description" content="Teodor Bedrii, photographer and videographer in Madrid. Fashion, musicians, concerts, DJs, portraits and couples.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0c1a35;
+  --navy-2:#122447;
+  --line:rgba(214,226,245,.28);
+  --red:#ee4430;
+  --red-deep:#c9311f;
+  --ice:#a9bfdd;
+  --ink:#dfe7f3;
+  --ink-dim:#9fb0c9;
+  --pad:clamp(16px,2.6vw,40px);
+}
+/* The poster palette is the same in both themes on purpose. */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--navy:#0c1a35;--ink:#dfe7f3}}
+:root[data-theme="dark"]{--navy:#0c1a35;--ink:#dfe7f3}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--navy);color:var(--ink);font-family:"Oswald",system-ui,sans-serif;font-weight:400;
+  text-transform:uppercase;letter-spacing:.01em;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-transform:inherit}
+::selection{background:var(--red);color:var(--navy)}
+
+/* film grain over everything */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.13;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  height:56px;padding:0 var(--pad);background:var(--navy);border-bottom:1px solid var(--line)}
+.nav ul{display:flex;gap:clamp(18px,3vw,40px);list-style:none}
+.nav a{font-weight:500;font-size:15px;letter-spacing:.02em;position:relative}
+.nav ul a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:2px;background:var(--red);transition:right .25s}
+.nav ul a:hover::after{right:0}
+.nav .brand{font-family:"Anton";font-size:17px;letter-spacing:.06em;color:var(--red)}
+.nav .icons{display:flex;gap:16px;align-items:center}
+.nav .icons svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.6;transition:stroke .2s}
+.nav .icons a:hover svg{stroke:var(--red)}
+
+/* ---------- split poster ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100svh - 56px);border-bottom:1px solid var(--line)}
+.panel{position:relative;overflow:hidden}
+.panel.text{padding:var(--pad);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--pad)}
+.copy{font-size:clamp(14px,1.15vw,17px);line-height:1.32;font-weight:400;max-width:34ch;position:relative;z-index:2}
+.copy p+p{margin-top:.15em}
+.vt{writing-mode:vertical-rl;font-family:"Anton",Impact,sans-serif;color:var(--red);line-height:1.02;
+  font-size:clamp(78px,10.2vw,168px);letter-spacing:-.005em;white-space:nowrap;align-self:start;position:relative;z-index:2;
+  user-select:none}
+.vt span{display:block}
+
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:.6em;border:2px solid var(--red);
+  padding:.6em 2.1em;font-weight:500;font-size:clamp(16px,1.35vw,20px);letter-spacing:.03em;color:var(--ink);
+  transition:background .2s,color .2s;position:relative;z-index:3;white-space:nowrap}
+.cta:hover{background:var(--red);color:var(--navy)}
+.cta.small{font-size:15px;padding:.5em 1.4em}
+
+.photo{background:var(--ice)}
+.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo .ghost{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:blur(14px);
+  transform:translateX(-7%);mix-blend-mode:screen;pointer-events:none;animation:drift 6s ease-in-out infinite alternate}
+.photo .ghost.lean{mix-blend-mode:multiply;opacity:.32;filter:blur(10px);object-position:50% 18%}
+@keyframes drift{to{transform:translateX(-2%)}}
+.tag{position:absolute;top:var(--pad);font-family:"Oswald";font-weight:500;color:var(--red);
+  font-size:clamp(18px,1.9vw,30px);letter-spacing:.01em;z-index:3;text-shadow:0 1px 0 rgba(12,26,53,.25)}
+.tag.chip{background:var(--navy);padding:.1em .4em}
+.tag.l{left:var(--pad)}.tag.r{right:var(--pad)}
+.scrawl{position:absolute;z-index:3;pointer-events:none;overflow:visible}
+.scrawl path{fill:none;stroke:var(--red);stroke-linecap:round;stroke-linejoin:round}
+
+.splat{position:absolute;left:-4%;bottom:-2%;width:62%;max-width:520px;z-index:1;pointer-events:none}
+
+/* draw-in for scrawls */
+.draw path{stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);transition:stroke-dashoffset 1.1s cubic-bezier(.6,.1,.2,1)}
+.in .draw path{stroke-dashoffset:0}
+.draw path:nth-child(2){transition-delay:.7s}
+
+/* ---------- hero specifics ---------- */
+.hero .text .bottom{grid-column:1/-1;align-self:end;display:flex;justify-content:flex-end;align-items:end}
+.hero .text{grid-template-rows:1fr auto}
+.hero .vt{grid-row:1;grid-column:2}
+.hero .copy{grid-column:1;grid-row:1}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--red);color:var(--navy);overflow:hidden;border-bottom:1px solid var(--line)}
+.ticker div{display:flex;width:max-content;animation:tick 38s linear infinite}
+.ticker span{font-family:"Anton";font-size:clamp(28px,3.4vw,52px);line-height:1;padding:.22em 0;white-space:nowrap}
+.ticker i{font-style:normal;padding:0 .5em;opacity:.5}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- work ---------- */
+.work{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1.58fr);border-bottom:1px solid var(--line)}
+.work .side{padding:var(--pad);border-right:1px solid var(--line);position:relative}
+.work .side .stick{position:sticky;top:calc(56px + var(--pad));display:flex;gap:var(--pad);align-items:flex-start}
+.work .side .vt{font-size:clamp(72px,8vw,140px)}
+.work .side .copy{writing-mode:horizontal-tb;max-width:18ch}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{position:relative;aspect-ratio:3/4.3;overflow:hidden;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--navy-2);text-align:left;display:block;width:100%}
+.card:nth-child(4n){border-right:0}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s}
+.card .blur{opacity:0;filter:blur(12px);mix-blend-mode:screen;transform:translateX(0)}
+.card:hover img:first-child,.card:focus-visible img:first-child{transform:scale(1.04)}
+.card:hover .blur,.card:focus-visible .blur{opacity:.6;transform:translateX(-9%)}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,26,53,0) 45%,rgba(12,26,53,.86));pointer-events:none}
+.card .lab{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;flex-direction:column-reverse;align-items:flex-start;gap:4px}
+.card .lab b{font-family:"Anton";font-weight:400;color:var(--red);font-size:clamp(26px,2.6vw,42px);line-height:.9}
+.card .lab small{font-size:13px;color:var(--ink);opacity:.85;letter-spacing:.04em}
+.card .num{position:absolute;top:12px;left:14px;z-index:2;font-size:13px;letter-spacing:.06em;color:var(--ink)}
+.card:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+
+/* ---------- about ---------- */
+.about .photo>img{object-position:50% 20%}
+.about .panel.text{grid-template-columns:auto minmax(0,1fr)}
+.about .vt{font-size:clamp(70px,8.4vw,142px)}
+.about .copy{max-width:44ch}
+.facts{margin-top:1.6em;display:grid;gap:1.1em;font-size:clamp(13px,1vw,15px);max-width:52ch}
+.facts h3{font-family:"Oswald";font-weight:500;color:var(--red);font-size:13px;letter-spacing:.08em;margin-bottom:.25em}
+.facts p{color:var(--ink);line-height:1.35}
+.langs{display:flex;flex-wrap:wrap;gap:8px}
+.langs span{border:1px solid var(--line);padding:.2em .6em;font-size:13px}
+
+/* ---------- rates ---------- */
+.rates{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1.58fr);border-bottom:1px solid var(--line)}
+.rates .side{padding:var(--pad);border-right:1px solid var(--line);position:relative;overflow:hidden}
+.rates .side .vt{font-size:clamp(72px,8vw,140px);position:sticky;top:calc(56px + var(--pad))}
+.rows{list-style:none}
+.rows li{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;gap:var(--pad);align-items:center;
+  padding:clamp(18px,2vw,28px) var(--pad);border-bottom:1px solid var(--line);transition:background .25s}
+.rows li:hover{background:var(--navy-2)}
+.rows h3{font-family:"Anton";font-weight:400;font-size:clamp(30px,3.3vw,54px);line-height:.95;color:var(--ink)}
+.rows p{font-size:clamp(13px,1vw,15px);line-height:1.35;color:var(--ink-dim)}
+.rows .price{font-family:"Anton";color:var(--red);font-size:clamp(30px,3.3vw,54px);line-height:1;text-align:right;white-space:nowrap}
+.rows .price small{display:block;font-family:"Oswald";font-size:12px;color:var(--ink-dim);letter-spacing:.08em}
+.rates .note{padding:var(--pad);font-size:14px;color:var(--ink-dim);max-width:70ch;line-height:1.4}
+
+/* ---------- contact ---------- */
+.contact .panel.text{grid-template-rows:auto 1fr auto}
+.contact .vt{grid-row:1/3;grid-column:2}
+.links{grid-column:1;grid-row:3;display:grid;gap:12px;align-self:end;justify-items:start;position:relative;z-index:3}
+.links .row{display:flex;flex-wrap:wrap;gap:12px}
+.links .meta{font-size:13px;color:var(--ink-dim);letter-spacing:.05em;margin-top:6px}
+
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px var(--pad);font-size:13px;color:var(--ink-dim);letter-spacing:.05em}
+footer a:hover{color:var(--red)}
+
+/* ---------- gallery overlay ---------- */
+.gal{position:fixed;inset:0;z-index:80;background:var(--navy);display:none;grid-template-rows:56px 1fr auto}
+.gal.open{display:grid}
+.gal header{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);border-bottom:1px solid var(--line)}
+.gal header h2{font-family:"Anton";font-weight:400;color:var(--red);font-size:26px;letter-spacing:.02em}
+.gal header button{font-weight:500;font-size:15px;display:flex;align-items:center;gap:.5em}
+.gal header button:hover{color:var(--red)}
+.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:var(--pad);align-items:center;
+  scrollbar-width:thin;scrollbar-color:var(--red) transparent;overscroll-behavior:contain}
+.strip img{height:min(76svh,100%);width:auto;max-width:none;scroll-snap-align:center;flex:none;background:var(--navy-2)}
+.gal footer{border-top:1px solid var(--line);align-items:center}
+.gal .arrows{display:flex;gap:10px}
+.gal .arrows button{border:2px solid var(--red);width:46px;height:38px;font-size:20px;line-height:1}
+.gal .arrows button:hover{background:var(--red);color:var(--navy)}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.in .rv,.rv.in{opacity:1;transform:none}
+.vt.rv{transform:translateY(-30px)}
+.in .vt.rv,.vt.rv.in{transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+  .draw path{stroke-dashoffset:0}
+}
+
+/* ---------- tablet ---------- */
+@media (max-width:1000px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card:nth-child(4n){border-right:1px solid var(--line)}
+  .card:nth-child(2n){border-right:0}
+  .work,.rates{grid-template-columns:1fr}
+  .work .side,.rates .side{border-right:0;border-bottom:1px solid var(--line)}
+  .work .side .stick{position:static}
+  .work .side .vt,.rates .side .vt{writing-mode:horizontal-tb;font-size:clamp(56px,12vw,110px);position:static}
+  .rows li{grid-template-columns:minmax(0,1fr) auto}
+  .rows li p{grid-column:1/-1;grid-row:2}
+}
+/* ---------- phone ---------- */
+@media (max-width:760px){
+  .nav ul{gap:16px}
+  .nav ul a{font-size:14px}
+  .nav .brand{display:none}
+  .split{grid-template-columns:1fr;min-height:0}
+  .panel.text{min-height:auto;padding:20px 16px 24px}
+  .photo{min-height:118vw}
+  .about .photo{order:2}
+  .vt{font-size:clamp(64px,21vw,120px)}
+  .hero .text{min-height:0}
+  .hero .text .bottom{margin-top:clamp(150px,44vw,220px)}
+  .contact .splat{display:none}
+  .hero .splat{bottom:-10%;width:74%}
+  .contact .panel.text{row-gap:28px}
+  .hero .vt{font-size:clamp(70px,24vw,130px)}
+  .copy{font-size:14px}
+  .splat{width:86%}
+  .about .panel.text{grid-template-columns:minmax(0,1fr) auto}
+  .about .panel.text .vt{grid-column:2;grid-row:1}
+  .about .panel.text .copy{grid-column:1;grid-row:1}
+  .rows li{padding:16px}
+  .tag{font-size:17px}
+  .gal .strip img{height:auto;max-height:70svh;width:86vw;object-fit:contain}
+}
+@media (max-width:400px){ .nav ul{gap:12px} .nav ul a{font-size:13px} .nav .icons{gap:12px} }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#rates">Rates</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="brand" href="#top" aria-label="Teo Photos, back to top">TEO PHOTOS</a>
+  <div class="icons">
+    <a href="https://instagram.com/teophotosss" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".6" fill="currentColor"/></svg></a>
+    <a href="mailto:teodorbedriy@gmail.com" aria-label="Email">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></svg></a>
+  </div>
+</nav>
+
+<!-- shared SVG filters -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" scale="5"/>
+  </filter>
+  <filter id="spray" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="26" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="3.2"/>
+  </filter>
+  <filter id="ink" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="2" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" scale="7"/>
+  </filter>
+</svg>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="split hero" aria-label="Intro">
+  <div class="panel text">
+    <div class="copy rv">
+      <p>I learned to read music before I learned to read light.</p>
+      <p>So when the room gets loud, I don't panic. I count.</p>
+      <p>Four bars. The build. The breath before the drop.</p>
+      <p>That's where I press the shutter:</p>
+      <p>Not after the moment. Right on it.</p>
+      <p>Fashion, stages, clubs, faces. Madrid, and anywhere the music is.</p>
+    </div>
+    <h1 class="vt rv" aria-label="Catch the peak"><span>Catch</span><span>the peak</span></h1>
+    <svg class="splat" viewBox="0 0 500 460" aria-hidden="true" data-splat="7"></svg>
+    <div class="bottom"><a class="cta" href="#contact">Book a shoot</a></div>
+  </div>
+  <div class="panel photo">
+    <img src="img/p381.jpg" alt="Three dancers on white stairs, leaning forward with a hand on their hats" fetchpriority="high" style="object-position:50% 18%">
+    <img class="ghost lean" src="img/p381.jpg" alt="" aria-hidden="true">
+    <span class="tag l rv">They lean.</span>
+    <span class="tag r rv">I hold it.</span>
+    <!-- zigzag arrow, top right -->
+    <svg class="scrawl draw" style="right:5%;top:11%;width:20%" viewBox="0 0 120 130" aria-hidden="true" filter="url(#rough)">
+      <path stroke-width="5" d="M100 8 C 80 30, 40 26, 30 44 C 22 60, 70 58, 74 76 C 78 92, 46 100, 40 118"/>
+      <path stroke-width="5" d="M22 96 L 40 120 L 62 104"/>
+    </svg>
+    <!-- curved arrow, bottom left -->
+    <svg class="scrawl draw" style="left:6%;bottom:9%;width:24%" viewBox="0 0 150 140" aria-hidden="true" filter="url(#ink)">
+      <path stroke-width="13" d="M128 18 C 70 4, 26 34, 30 84 C 32 104, 44 116, 58 122"/>
+      <path stroke-width="12" d="M24 104 L 58 124 L 70 92"/>
+    </svg>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div>
+  <span>Fashion<i>/</i>Musicians<i>/</i>Concerts<i>/</i>DJs<i>/</i>Portraits<i>/</i>Couples<i>/</i>Dance<i>/</i>Events<i>/</i>Reels<i>/</i></span>
+  <span>Fashion<i>/</i>Musicians<i>/</i>Concerts<i>/</i>DJs<i>/</i>Portraits<i>/</i>Couples<i>/</i>Dance<i>/</i>Events<i>/</i>Reels<i>/</i></span>
+</div></div>
+
+<!-- ================= WORK ================= -->
+<section class="work" id="work" aria-label="Work">
+  <div class="side">
+    <div class="stick">
+      <h2 class="vt rv"><span>Work</span></h2>
+      <div class="copy rv">
+        <p>Eight rooms I keep walking into.</p>
+        <p style="margin-top:.8em;color:var(--ink-dim)">Tap a series to open it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="split about" id="about" aria-label="About">
+  <div class="panel photo">
+    <img src="img/teo-9928.jpg" alt="Teodor Bedrii holding his camera in a warm studio light" loading="lazy">
+    <span class="tag l chip rv">Ear first.</span>
+    <span class="tag r chip rv">Eye second.</span>
+    <svg class="scrawl draw" style="right:9%;top:17%;width:14%" viewBox="0 0 100 120" aria-hidden="true" filter="url(#rough)">
+      <path stroke-width="5" d="M70 6 C 92 30, 30 40, 44 62 C 54 78, 80 74, 62 104"/>
+      <path stroke-width="5" d="M48 92 L 60 108 L 80 98"/>
+    </svg>
+    <svg class="scrawl draw" style="left:8%;bottom:12%;width:22%" viewBox="0 0 140 70" aria-hidden="true" filter="url(#ink)">
+      <path stroke-width="9" d="M8 40 C 30 10, 60 60, 84 30 C 98 14, 112 26, 130 20"/>
+    </svg>
+  </div>
+  <div class="panel text">
+    <h2 class="vt rv" aria-label="Teodor Bedrii"><span>Teodor</span><span>Bedrii</span></h2>
+    <div class="copy rv">
+      <p>Ukrainian. Based in Madrid. Four years behind the camera, a lot longer behind a music stand.</p>
+      <p style="margin-top:.7em">I study viola at the Real Conservatorio Superior de Música de Madrid, and I play violin, piano and guitar. On stage I can hear where the song is going, so I'm already framed when it gets there.</p>
+      <p style="margin-top:.7em">Studio light or a pitch-black club, same calm. I edit in Lightroom and DaVinci Resolve and bring back photo and video from the same shoot.</p>
+      <div class="facts">
+        <div><h3>In front of my lens</h3><p>Tom Holland · Andriy Lunin · Sviatoslav Vakarchuk · Kalush Orchestra · Odyn v Kanoe</p></div>
+        <div><h3>Worked with</h3><p>Bogotá Fashion Week · Lanes · Headway Inc · Beatmotiv · Svit Kavy · Teatro Monumental</p></div>
+        <div><h3>I speak</h3><div class="langs"><span>UA</span><span>EN</span><span>ES</span><span>PL</span><span>RU</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RATES ================= -->
+<section class="rates" id="rates" aria-label="Rates">
+  <div class="side"><h2 class="vt rv"><span>Rates</span></h2></div>
+  <div>
+    <ul class="rows">
+      <li class="rv"><h3>Fashion / lookbook</h3><p>Half day, studio or street · 40 edited photos · help with styling and moodboard · studio rent paid separately</p><div class="price"><small>from</small>€450</div></li>
+      <li class="rv"><h3>Portrait</h3><p>1 hour, 1 location · 20 edited photos · online gallery in 5 days</p><div class="price"><small>from</small>€220</div></li>
+      <li class="rv"><h3>Couples</h3><p>1.5 hours at golden hour · 30 edited photos · short video on request</p><div class="price"><small>&nbsp;</small>€200</div></li>
+      <li class="rv"><h3>Musicians</h3><p>Photo session up to 40 photos · concerts from €250 · backstage clips on request</p><div class="price"><small>from</small>€200</div></li>
+      <li class="rv"><h3>Dancers</h3><p>Photo from €150 · video from €150 · photo + video from €200</p><div class="price"><small>from</small>€150</div></li>
+      <li class="rv"><h3>Events</h3><p>Concerts, fashion shows, corporate · minimum 2 hours · delivery in 7 days</p><div class="price"><small>per hour</small>€100</div></li>
+      <li class="rv"><h3>Backstage &amp; reels</h3><p>Vertical reels for social media, cut to music · add-on to any shoot</p><div class="price"><small>from</small>€100</div></li>
+    </ul>
+    <p class="note">All RAW files from any session: +€100. Every shoot can be bent to fit you. Send the idea, the date and the place, and I'll come back with a quote.</p>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="split contact" id="contact" aria-label="Contact">
+  <div class="panel text">
+    <div class="copy rv">
+      <p>Got a date, a stage, a collection or just a feeling?</p>
+      <p>Tell me what it should sound like. I'll make it look like that.</p>
+    </div>
+    <h2 class="vt rv" aria-label="Let's shoot"><span>Let's</span><span>shoot</span></h2>
+    <svg class="splat" viewBox="0 0 500 460" aria-hidden="true" data-splat="21" style="left:-8%;bottom:16%;width:46%"></svg>
+    <div class="links">
+      <div class="row">
+        <a class="cta" href="https://wa.me/34607327378?text=Hi%20Teo!%20I%27d%20like%20to%20book%20a%20shoot." target="_blank" rel="noopener">WhatsApp</a>
+        <a class="cta" href="mailto:teodorbedriy@gmail.com?subject=Shoot%20request">Email</a>
+      </div>
+      <a class="cta small" href="https://instagram.com/teophotosss" target="_blank" rel="noopener">Instagram @teophotosss</a>
+      <p class="meta">+34 607 327 378 · teodorbedriy@gmail.com · Madrid, available worldwide</p>
+    </div>
+  </div>
+  <div class="panel photo">
+    <img src="img/p137.jpg" alt="Rapper in a pink cap singing under purple stage lights" loading="lazy">
+    <span class="tag l chip rv">Your stage.</span>
+    <span class="tag r chip rv">My timing.</span>
+    <svg class="scrawl draw" style="left:8%;bottom:10%;width:26%" viewBox="0 0 150 140" aria-hidden="true" filter="url(#ink)">
+      <path stroke-width="12" d="M20 20 C 80 6, 124 40, 118 88 C 116 106, 104 118, 90 124"/>
+      <path stroke-width="11" d="M124 104 L 90 126 L 78 94"/>
+    </svg>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>© Teodor Bedrii · Teo Photos</span>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<!-- gallery overlay -->
+<div class="gal" id="gal" role="dialog" aria-modal="true" aria-labelledby="galt" hidden>
+  <header><h2 id="galt">Series</h2><button id="galx" aria-label="Close gallery">Close ✕</button></header>
+  <div class="strip" id="strip" tabindex="0"></div>
+  <footer><span id="galn"></span><div class="arrows"><button id="galp" aria-label="Previous">←</button><button id="galnx" aria-label="Next">→</button></div></footer>
+</div>
+
+<script>
+const SERIES=[
+  {t:"Fashion",   c:"p50", s:["p50","p39","p35","p49","p53","p36","p51","p42","p54","p55"]},
+  {t:"Musicians", c:"p100",s:["p100","p110","p102","p101","p108","p130","p131","p99"]},
+  {t:"Concerts",  c:"p334",s:["p334","p137","p138","p338","p339","p336","p337","p340"]},
+  {t:"DJs",       c:"p200",s:["p200","p201","p203","p376","p377","p202","p204"]},
+  {t:"Portraits", c:"p94", s:["p94","p84","p26","p43","p95","p40","p18","p41","p88"]},
+  {t:"Couples",   c:"p449",s:["p449","p465","p451","p452","p448","p450"]},
+  {t:"Dance & sport",c:"p380",s:["p381","p380","p419","p420","p421","p422"]},
+  {t:"Events",    c:"p382",s:["p382","p383","p115","p116"]}
+];
+const grid=document.getElementById('grid');
+SERIES.forEach((x,i)=>{
+  const b=document.createElement('button');
+  b.className='card rv';b.type='button';b.setAttribute('aria-label',`Open ${x.t}, ${x.s.length} photos`);
+  b.innerHTML=`<img src="img/${x.c}.jpg" alt="" loading="lazy"><img class="blur" src="img/${x.c}.jpg" alt="" loading="lazy">
+   <span class="num">0${i+1}</span><span class="lab"><b>${x.t}</b><small>${x.s.length} frames</small></span>`;
+  b.onclick=()=>openGal(i,b);
+  grid.appendChild(b);
+});
+
+/* gallery */
+const gal=document.getElementById('gal'),strip=document.getElementById('strip'),galn=document.getElementById('galn');
+let lastFocus=null;
+function openGal(i,from){
+  const x=SERIES[i];lastFocus=from;
+  document.getElementById('galt').textContent=x.t;
+  strip.innerHTML=x.s.map((p,k)=>`<img src="img/${p}.jpg" alt="${x.t}, frame ${k+1}" loading="${k<3?'eager':'lazy'}">`).join('');
+  galn.textContent=`${x.s.length} frames · scroll or use arrows`;
+  gal.hidden=false;gal.classList.add('open');document.body.style.overflow='hidden';
+  strip.scrollLeft=0;document.getElementById('galx').focus();
+}
+function closeGal(){gal.classList.remove('open');gal.hidden=true;document.body.style.overflow='';lastFocus&&lastFocus.focus()}
+function step(d){
+  const imgs=[...strip.children];const mid=strip.scrollLeft+strip.clientWidth/2;
+  let cur=imgs.findIndex(im=>im.offsetLeft+im.offsetWidth>mid);if(cur<0)cur=imgs.length-1;
+  const n=imgs[Math.max(0,Math.min(imgs.length-1,cur+d))];
+  strip.scrollTo({left:n.offsetLeft-(strip.clientWidth-n.offsetWidth)/2,behavior:'smooth'});
+}
+document.getElementById('galx').onclick=closeGal;
+document.getElementById('galp').onclick=()=>step(-1);
+document.getElementById('galnx').onclick=()=>step(1);
+addEventListener('keydown',e=>{if(!gal.classList.contains('open'))return;
+  if(e.key==='Escape')closeGal();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+strip.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){strip.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+
+/* paint splatter, seeded so it looks the same on every visit */
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+document.querySelectorAll('svg[data-splat]').forEach(svg=>{
+  const r=rng(+svg.dataset.splat),NS='http://www.w3.org/2000/svg';
+  const g=document.createElementNS(NS,'g');
+  // blue spray stroke underneath
+  const s=document.createElementNS(NS,'path');
+  s.setAttribute('d','M10 430 C 60 330, 170 300, 200 360 C 226 410, 150 440, 120 400 C 96 366, 190 300, 290 312');
+  s.setAttribute('fill','none');s.setAttribute('stroke','#8fb0dc');s.setAttribute('stroke-width','34');
+  s.setAttribute('stroke-linecap','round');s.setAttribute('opacity','.75');s.setAttribute('filter','url(#spray)');
+  g.appendChild(s);
+  const red=document.createElementNS(NS,'g');red.setAttribute('fill','#ee4430');red.setAttribute('filter','url(#ink)');
+  const cx=230,cy=200;
+  // core blots
+  for(let i=0;i<9;i++){const a=r()*6.28,d=r()*60,c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',cx+Math.cos(a)*d);c.setAttribute('cy',cy+Math.sin(a)*d);c.setAttribute('r',8+r()*20);red.appendChild(c)}
+  // flung drops with tails
+  for(let i=0;i<34;i++){const a=r()*6.28,d=70+r()*170,x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d*.85,rad=2+r()*(i<10?13:6);
+    const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',rad);red.appendChild(c);
+    if(r()>.55){const l=document.createElementNS(NS,'line');l.setAttribute('x1',x);l.setAttribute('y1',y);
+      l.setAttribute('x2',cx+Math.cos(a)*(d-30-r()*30));l.setAttribute('y2',cy+Math.sin(a)*(d-30)*.85);
+      l.setAttribute('stroke','#ee4430');l.setAttribute('stroke-width',rad*.9);l.setAttribute('stroke-linecap','round');red.appendChild(l)}}
+  // a drip
+  const dp=document.createElementNS(NS,'path');dp.setAttribute('d',`M${cx-6} ${cy+40} q4 60 2 110 q0 10 6 10 q6 0 5-10 q-3-50 2-110z`);red.appendChild(dp);
+  g.appendChild(red);svg.appendChild(g);
+});
+
+/* set dash length for scrawls, then reveal on scroll */
+document.querySelectorAll('.draw path').forEach(p=>{try{p.style.setProperty('--len',Math.ceil(p.getTotalLength())+2)}catch(e){}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('section,.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
