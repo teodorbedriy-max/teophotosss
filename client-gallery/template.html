@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>{{CLIENT}} · Teo Photos</title>
+<meta property="og:title" content="{{CLIENT}} · Teo Photos">
+<meta property="og:image" content="{{COVER}}">
+<meta name="theme-color" content="#efe4d6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23efe4d6'/%3E%3Ctext x='32' y='48' font-family='Impact,Arial Narrow,sans-serif' font-size='42' fill='%233a3826' text-anchor='middle'%3ETB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Ms+Madi&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="{{COVER}}">
+<style>
+:root{
+  --paper:#efe4d6;--paper-2:#e7dac9;--ink:#3a3826;--ink-2:#55523b;--mute:#857f69;--pink:#e2629f;--line:rgba(58,56,38,.18);
+  --dark:#1a1912;
+  --f-head:"Anton","Impact","Arial Narrow",sans-serif;--f-script:"Ms Madi","Brush Script MT",cursive;--f-body:"Archivo",system-ui,sans-serif;
+  --gut:clamp(16px,2.6vw,36px);
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:var(--pink);color:var(--paper)}
+:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.up{text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600;line-height:1.25}
+
+.bar{display:flex;justify-content:space-between;align-items:center;padding:calc(18px + env(safe-area-inset-top,0px)) var(--gut) 18px;border-bottom:1px solid var(--line)}
+.logo{font-family:var(--f-head);font-size:22px;letter-spacing:.01em;text-transform:uppercase}
+
+.hero{display:grid;grid-template-columns:1fr;gap:28px;padding:28px var(--gut) 8px}
+.cover{width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--paper-2)}
+.for{font-family:var(--f-script);color:var(--pink);font-size:clamp(44px,7vw,84px);line-height:.8;margin:0 0 4px}
+.name{font-family:var(--f-head);font-weight:400;text-transform:uppercase;line-height:.86;margin:0;font-size:clamp(64px,13vw,190px);overflow-wrap:anywhere}
+.title{font-size:18px;font-weight:500;margin:14px 0 0;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0 0;color:var(--mute)}
+.meta > span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pink);margin-right:8px;vertical-align:1px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:600;font-size:15px;transition:background .2s,transform .1s}
+.btn:hover{background:var(--pink)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn[disabled]{opacity:.55;pointer-events:none}
+.btn svg{width:18px;height:18px;flex:none}
+.prog{margin-top:16px;max-width:420px}
+.prog .track{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.prog .fill{height:100%;width:0;background:var(--pink);transition:width .2s}
+.prog p{margin:8px 0 0;color:var(--mute);font-size:13px}
+.note{margin:22px 0 0;color:var(--mute);font-size:13px;max-width:440px}
+
+@media (min-width:900px){
+  .hero{grid-template-columns:1.15fr .85fr;align-items:end;gap:48px;padding-top:44px}
+  .hero .txt{padding-bottom:6px}
+  .cover{aspect-ratio:4/5;max-height:78vh}
+}
+
+.grid{columns:2;column-gap:8px;padding:40px var(--gut) 0}
+@media (min-width:760px){.grid{columns:3;column-gap:12px}}
+@media (min-width:1400px){.grid{columns:4}}
+.tile{display:block;break-inside:avoid;margin-bottom:8px;background:var(--paper-2);overflow:hidden;cursor:zoom-in}
+@media (min-width:760px){.tile{margin-bottom:12px}}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease,opacity .4s}
+.tile:hover img{transform:scale(1.025)}
+
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:56px var(--gut) calc(32px + env(safe-area-inset-bottom,0px));color:var(--mute)}
+.foot a{border-bottom:1px solid var(--line)}
+.foot a:hover{color:var(--pink);border-color:var(--pink)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:50;background:var(--dark);color:#efe4d6;display:flex;flex-direction:column;touch-action:pan-y pinch-zoom}
+.lb-top,.lb-bot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px var(--gut)}
+.lb-top{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.lb-bot{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));justify-content:center;flex-wrap:wrap}
+.lb-name{color:#a9a28a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;padding:0 var(--gut)}
+.lb-stage img{max-width:100%;max-height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.ico{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:none}
+.ico:hover{background:rgba(239,228,214,.1)}
+.ico svg{width:22px;height:22px}
+.nav-b{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(26,25,18,.45)}
+.nav-b:hover{background:var(--pink)}
+.nav-b svg{width:26px;height:26px}
+.prev{left:var(--gut)}.next{right:var(--gut)}
+@media (hover:hover) and (pointer:fine){.nav-b{display:flex}}
+.lb .btn{background:#efe4d6;color:var(--dark)}
+.lb .btn:hover{background:var(--pink);color:#efe4d6}
+.lb .btn.ghost{background:transparent;color:#efe4d6;box-shadow:inset 0 0 0 1.5px rgba(239,228,214,.6)}
+.lb .btn.ghost:hover{background:#efe4d6;color:var(--dark)}
+body.lock{overflow:hidden}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="https://teophotosss.netlify.app/">Teo Photos</a>
+  <span class="up" data-t="private">Приватна галерея</span>
+</header>
+
+<main>
+<section class="hero">
+  <div class="txt">
+    <p class="for" data-t="for">твої фото,</p>
+    <h1 class="name">{{CLIENT}}</h1>
+    <p class="title" id="title">{{TITLE}}</p>
+    <div class="meta up">
+      <span>{{DATE}}</span>
+      <span><b>{{COUNT}}</b> <span data-t="photos" style="all:unset">фото</span></span>
+      <span>{{TOTAL}}</span>
+    </div>
+    <div class="acts">
+      <button class="btn" id="zipBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+        <span data-t="all">Завантажити все</span>
+      </button>
+      <button class="btn ghost" id="shareBtn" type="button" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+        <span data-t="toPhotos">Зберегти у «Фото»</span>
+      </button>
+    </div>
+    <div class="prog" id="prog" hidden>
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <p id="progText"></p>
+    </div>
+    <p class="note" data-t="note">Усі файли в оригінальній якості, без стиснення. Натисни на фото, щоб відкрити його великим і завантажити окремо.</p>
+  </div>
+  <img class="cover" src="{{COVER}}" alt="">
+</section>
+
+<section class="grid" id="grid">
+{{GRID}}
+</section>
+</main>
+
+<footer class="foot up">
+  <span>© Teo Photos · Teodor Bedrii</span>
+  <a href="https://teophotosss.netlify.app/">teophotosss.netlify.app</a>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true">
+  <div class="lb-top">
+    <span class="up" id="lbCount"></span>
+    <span class="lb-name up" id="lbName"></span>
+    <button class="ico" id="lbClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="lb-stage" id="stage">
+    <img id="lbImg" alt="">
+    <button class="nav-b prev" id="prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button class="nav-b next" id="next" type="button" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  </div>
+  <div class="lb-bot">
+    <a class="btn" id="lbDl" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+      <span id="lbDlText"></span>
+    </a>
+    <button class="btn ghost" id="lbShare" type="button" hidden></button>
+  </div>
+</div>
+
+<script id="data" type="application/json">{{DATA}}</script>
+<script type="module">
+const D = JSON.parse(document.getElementById('data').textContent);
+const T = {
+  uk:{private:'Приватна галерея',for:'твої фото,',photos:'фото',all:'Завантажити все',toPhotos:'Зберегти у «Фото»',
+      note:'Усі файли в оригінальній якості, без стиснення. Натисни на фото, щоб відкрити його великим і завантажити окремо.',
+      original:'Оригінал',preparing:'Готую файли…',zipping:'Пакую архів…',ready:'Готово! Файл ZIP завантажується.',
+      tapSave:'Натисни ще раз, щоб зберегти',saveN:n=>`Зберегти ${n} фото`,save1:'Зберегти у «Фото»',failed:'Не вдалося. Спробуй «Завантажити все».',},
+  en:{private:'Private gallery',for:'your photos,',photos:'photos',all:'Download all',toPhotos:'Save to Photos',
+      note:'All files are in original quality, uncompressed. Tap a photo to view it large and download it on its own.',
+      original:'Original',preparing:'Preparing files…',zipping:'Packing the archive…',ready:'Done! Your ZIP is downloading.',
+      tapSave:'Tap again to save',saveN:n=>`Save ${n} photos`,save1:'Save to Photos',failed:'That did not work. Try “Download all”.',},
+  es:{private:'Galería privada',for:'tus fotos,',photos:'fotos',all:'Descargar todo',toPhotos:'Guardar en Fotos',
+      note:'Todos los archivos en calidad original, sin compresión. Toca una foto para verla en grande y descargarla.',
+      original:'Original',preparing:'Preparando archivos…',zipping:'Creando el ZIP…',ready:'¡Listo! Tu ZIP se está descargando.',
+      tapSave:'Toca otra vez para guardar',saveN:n=>`Guardar ${n} fotos`,save1:'Guardar en Fotos',failed:'No ha funcionado. Prueba «Descargar todo».',}
+}[D.lang] || {};
+document.querySelectorAll('[data-t]').forEach(el => { const v = T[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
+if (!D.title) document.getElementById('title').hidden = true;
+
+const $ = id => document.getElementById(id);
+const items = D.items;
+const mb = n => n >= 1073741824 ? (n/1073741824).toFixed(1)+' GB' : (n/1048576).toFixed(1)+' MB';
+const touch = matchMedia('(pointer:coarse)').matches;
+const canShareFiles = (() => { try { return !!navigator.canShare && navigator.canShare({files:[new File([new Uint8Array(1)],'a.jpg',{type:'image/jpeg'})]}); } catch { return false; } })();
+const useShare = touch && canShareFiles;
+const mime = n => /\.png$/i.test(n) ? 'image/png' : /\.webp$/i.test(n) ? 'image/webp' : /\.tiff?$/i.test(n) ? 'image/tiff' : 'image/jpeg';
+
+// ---------- progress ----------
+const prog = (frac, text) => { $('prog').hidden = false; $('fill').style.width = (frac*100).toFixed(1)+'%'; $('progText').textContent = text; };
+
+async function fetchAll(onBytes){
+  const out = [];
+  for (const it of items){
+    const r = await fetch(it.o);
+    if (!r.ok) throw new Error(r.status);
+    const reader = r.body.getReader(); const chunks = [];
+    for (;;){ const {done, value} = await reader.read(); if (done) break; chunks.push(value); onBytes(value.length); }
+    out.push(new File(chunks, it.n, {type: mime(it.n)}));
+  }
+  return out;
+}
+
+// ---------- tiny ZIP writer (store only: files go in exactly as they are) ----------
+const CRC = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
+async function makeZip(files){
+  const enc = new TextEncoder(), parts = [], central = [];
+  let offset = 0;
+  const dosTime = d => [(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1), ((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate()];
+  for (const f of files){
+    const name = enc.encode(f.name), size = f.size;
+    let crc = 0xFFFFFFFF;
+    const rd = f.stream().getReader();
+    for (;;){ const {done, value} = await rd.read(); if (done) break; for (let i = 0; i < value.length; i++) crc = CRC[(crc ^ value[i]) & 255] ^ (crc >>> 8); }
+    crc = (crc ^ 0xFFFFFFFF) >>> 0;
+    const [tm, dt] = dosTime(new Date(f.lastModified || Date.now()));
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+    lh.setUint16(10, tm, true); lh.setUint16(12, dt, true); lh.setUint32(14, crc, true);
+    lh.setUint32(18, size, true); lh.setUint32(22, size, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+    parts.push(lh, name, f);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true);
+    ch.setUint16(12, tm, true); ch.setUint16(14, dt, true); ch.setUint32(16, crc, true);
+    ch.setUint32(20, size, true); ch.setUint32(24, size, true); ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+    central.push(ch, name);
+    offset += 30 + name.length + size;
+  }
+  const cdSize = central.reduce((n, x) => n + x.byteLength, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+  end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, end], {type:'application/zip'});
+}
+
+// ---------- download all as ZIP (built in the browser) ----------
+let fetched = null;
+async function getFiles(){
+  if (fetched) return fetched;
+  let got = 0;
+  prog(0, T.preparing);
+  fetched = await fetchAll(n => { got += n; prog(got/D.total, `${T.preparing} ${mb(got)} / ${mb(D.total)}`); });
+  return fetched;
+}
+$('zipBtn').addEventListener('click', async () => {
+  const b = $('zipBtn'); b.disabled = true;
+  try {
+    const files = await getFiles();
+    prog(1, T.zipping);
+    const blob = await makeZip(files);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = D.zip;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+    prog(1, T.ready);
+  } catch (e) { console.error(e); prog(0, T.failed); fetched = null; }
+  b.disabled = false;
+});
+
+// ---------- phones: save everything straight to the Photos app ----------
+if (useShare){
+  const sb = $('shareBtn'); sb.hidden = false;
+  let ready = false;
+  sb.addEventListener('click', async () => {
+    if (!ready){
+      sb.disabled = true;
+      try { await getFiles(); ready = true; sb.querySelector('span').textContent = T.saveN(items.length); prog(1, T.tapSave); }
+      catch (e) { console.error(e); prog(0, T.failed); fetched = null; }
+      sb.disabled = false; return;
+    }
+    try { await navigator.share({files: fetched}); }
+    catch (e) { if (e.name !== 'AbortError') { console.error(e); prog(1, T.failed); } }
+  });
+}
+
+// ---------- lightbox ----------
+let cur = 0, one = null;
+const lb = $('lb'), img = $('lbImg');
+function show(i){
+  cur = (i + items.length) % items.length;
+  const it = items[cur];
+  img.src = it.p; img.alt = it.n;
+  $('lbCount').textContent = `${cur+1} / ${items.length}`;
+  $('lbName').textContent = it.n;
+  $('lbDl').href = it.o; $('lbDl').setAttribute('download', it.n);
+  $('lbDlText').textContent = `${T.original} · ${mb(it.s)}`;
+  one = null;
+  if (useShare){ $('lbShare').hidden = false; $('lbShare').textContent = T.save1; }
+  [1,-1].forEach(d => { const n = items[(cur+d+items.length)%items.length]; new Image().src = n.p; });
+}
+function open(i){ show(i); lb.hidden = false; document.body.classList.add('lock'); history.pushState({lb:1}, ''); }
+function close(){ if (lb.hidden) return; lb.hidden = true; document.body.classList.remove('lock'); }
+$('grid').addEventListener('click', e => { const t = e.target.closest('.tile'); if (!t) return; e.preventDefault(); open(+t.dataset.i); });
+$('lbClose').addEventListener('click', () => history.back());
+$('prev').addEventListener('click', () => show(cur-1));
+$('next').addEventListener('click', () => show(cur+1));
+addEventListener('popstate', close);
+addEventListener('keydown', e => {
+  if (lb.hidden) return;
+  if (e.key === 'ArrowRight') show(cur+1);
+  else if (e.key === 'ArrowLeft') show(cur-1);
+  else if (e.key === 'Escape') history.back();
+});
+let sx = 0, sy = 0;
+$('stage').addEventListener('touchstart', e => { if (e.touches.length === 1){ sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, {passive:true});
+$('stage').addEventListener('touchend', e => {
+  const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)*1.5) show(cur + (dx < 0 ? 1 : -1));
+  else if (dy > 90 && Math.abs(dy) > Math.abs(dx)*1.5) history.back();
+});
+$('lbShare').addEventListener('click', async () => {
+  const b = $('lbShare'), it = items[cur];
+  if (!one){
+    b.disabled = true; b.textContent = T.preparing;
+    try {
+      const r = await fetch(it.o); one = new File([await r.blob()], it.n, {type: mime(it.n)});
+      b.textContent = T.tapSave;
+    } catch (e) { b.textContent = T.failed; }
+    b.disabled = false; return;
+  }
+  try { await navigator.share({files:[one]}); } catch (e) { if (e.name !== 'AbortError') b.textContent = T.failed; }
+});
+</script>
+</body>
+</html>
