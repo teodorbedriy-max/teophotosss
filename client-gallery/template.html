@@ -219,36 +219,61 @@ function saveBlob(blob, name){
   setTimeout(() => URL.revokeObjectURL(a.href), 60000);
 }
 
-// ---------- tiny ZIP writer (store only: files go in exactly as they are) ----------
+// ---------- ZIP writer (store only: files go in exactly as they are; ZIP64 above 4 GB) ----------
 const CRC = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
-async function makeZip(files){
+async function makeZip(entries, onBytes = () => {}, force64 = false){
   const enc = new TextEncoder(), parts = [], central = [];
+  const total = entries.reduce((n, e) => n + e.blob.size + 30 + 20 + e.path.length * 3, 0);
+  const z64 = force64 || total >= 0xFFFFFFFF || entries.length >= 0xFFFF;
+  const now = new Date();
+  const tm = (now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1), dt = ((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate();
+  const ver = z64 ? 45 : 20, MAX32 = 0xFFFFFFFF;
   let offset = 0;
-  const dosTime = d => [(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1), ((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate()];
-  for (const f of files){
-    const name = enc.encode(f.name), size = f.size;
+  for (const {path, blob} of entries){
+    const name = enc.encode(path), size = blob.size;
     let crc = 0xFFFFFFFF;
-    const rd = f.stream().getReader();
-    for (;;){ const {done, value} = await rd.read(); if (done) break; for (let i = 0; i < value.length; i++) crc = CRC[(crc ^ value[i]) & 255] ^ (crc >>> 8); }
+    const rd = blob.stream().getReader();
+    for (;;){ const {done, value} = await rd.read(); if (done) break; for (let i = 0; i < value.length; i++) crc = CRC[(crc ^ value[i]) & 255] ^ (crc >>> 8); onBytes(value.length); }
     crc = (crc ^ 0xFFFFFFFF) >>> 0;
-    const [tm, dt] = dosTime(new Date(f.lastModified || Date.now()));
-    const lh = new DataView(new ArrayBuffer(30));
-    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+    const lx = z64 ? 20 : 0;
+    const lh = new DataView(new ArrayBuffer(30 + lx));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, ver, true); lh.setUint16(6, 0x0800, true);
     lh.setUint16(10, tm, true); lh.setUint16(12, dt, true); lh.setUint32(14, crc, true);
-    lh.setUint32(18, size, true); lh.setUint32(22, size, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
-    parts.push(lh, name, f);
-    const ch = new DataView(new ArrayBuffer(46));
-    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true);
+    lh.setUint32(18, z64 ? MAX32 : size, true); lh.setUint32(22, z64 ? MAX32 : size, true);
+    lh.setUint16(26, name.length, true); lh.setUint16(28, lx, true);
+    const cx = z64 ? 28 : 0;
+    const ch = new DataView(new ArrayBuffer(46 + cx));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, ver, true); ch.setUint16(6, ver, true); ch.setUint16(8, 0x0800, true);
     ch.setUint16(12, tm, true); ch.setUint16(14, dt, true); ch.setUint32(16, crc, true);
-    ch.setUint32(20, size, true); ch.setUint32(24, size, true); ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
-    central.push(ch, name);
-    offset += 30 + name.length + size;
+    ch.setUint32(20, z64 ? MAX32 : size, true); ch.setUint32(24, z64 ? MAX32 : size, true);
+    ch.setUint16(28, name.length, true); ch.setUint16(30, cx, true); ch.setUint32(42, z64 ? MAX32 : offset, true);
+    if (z64){
+      // local extra: sizes; central extra: sizes + offset (both after the fixed header)
+      lh.setUint16(30, 1, true); lh.setUint16(32, 16, true); lh.setBigUint64(34, BigInt(size), true); lh.setBigUint64(42, BigInt(size), true);
+    }
+    const cExtra = new DataView(new ArrayBuffer(cx));
+    if (z64){ cExtra.setUint16(0, 1, true); cExtra.setUint16(2, 24, true); cExtra.setBigUint64(4, BigInt(size), true); cExtra.setBigUint64(12, BigInt(size), true); cExtra.setBigUint64(20, BigInt(offset), true); }
+    const lhHead = new DataView(lh.buffer, 0, 30), lhExtra = new DataView(lh.buffer, 30, lx);
+    parts.push(lhHead, name, lhExtra, blob);
+    central.push(new DataView(ch.buffer, 0, 46), name, cExtra);
+    offset += 30 + name.length + lx + size;
   }
-  const cdSize = central.reduce((n, x) => n + x.byteLength, 0);
+  const cdSize = central.reduce((n, x) => n + x.byteLength, 0), cdStart = offset, n = entries.length;
+  const tail = [];
+  if (z64){
+    const r = new DataView(new ArrayBuffer(56));
+    r.setUint32(0, 0x06064b50, true); r.setBigUint64(4, 44n, true); r.setUint16(12, 45, true); r.setUint16(14, 45, true);
+    r.setBigUint64(24, BigInt(n), true); r.setBigUint64(32, BigInt(n), true); r.setBigUint64(40, BigInt(cdSize), true); r.setBigUint64(48, BigInt(cdStart), true);
+    const l = new DataView(new ArrayBuffer(20));
+    l.setUint32(0, 0x07064b50, true); l.setBigUint64(8, BigInt(cdStart + cdSize), true); l.setUint32(16, 1, true);
+    tail.push(r, l);
+  }
   const end = new DataView(new ArrayBuffer(22));
-  end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
-  end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
-  return new Blob([...parts, ...central, end], {type:'application/zip'});
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, z64 ? 0xFFFF : n, true); end.setUint16(10, z64 ? 0xFFFF : n, true);
+  end.setUint32(12, z64 ? MAX32 : cdSize, true); end.setUint32(16, z64 ? MAX32 : cdStart, true);
+  tail.push(end);
+  return new Blob([...parts, ...central, ...tail], {type:'application/zip'});
 }
 
 // ---------- download all as ZIP (built in the browser) ----------
@@ -265,7 +290,7 @@ $('zipBtn').addEventListener('click', async () => {
   try {
     const files = await getFiles();
     prog(1, T.zipping);
-    const blob = await makeZip(files);
+    const blob = await makeZip(files.map(f => ({path: f.name, blob: f})));
     saveBlob(blob, D.zip);
     prog(1, T.ready);
   } catch (e) { console.error(e); prog(0, T.failed); fetched = null; }
