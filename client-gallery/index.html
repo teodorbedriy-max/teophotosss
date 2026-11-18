@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>New Gallery · Teo Photos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Ms+Madi&display=swap" rel="stylesheet">
+<style>
+/* Builder: one column of steps on paper, photos as a contact sheet below */
+:root{
+  --paper:#efe4d6;--paper-2:#e7dac9;--ink:#3a3826;--ink-2:#55523b;--mute:#857f69;--pink:#e2629f;--line:rgba(58,56,38,.18);--warn:#b4472e;
+  --f-head:"Anton","Impact","Arial Narrow",sans-serif;--f-script:"Ms Madi","Brush Script MT",cursive;--f-body:"Archivo",system-ui,sans-serif;
+  --gut:clamp(16px,2.6vw,36px);
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.up{text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600;line-height:1.25}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:18px max(var(--gut),env(safe-area-inset-left,0px)) 18px;border-bottom:1px solid var(--line)}
+.logo{font-family:var(--f-head);font-size:22px;text-transform:uppercase;color:inherit;text-decoration:none}
+main{max-width:1180px;margin:0 auto;padding:32px var(--gut) 80px}
+h1{font-family:var(--f-head);font-weight:400;text-transform:uppercase;font-size:clamp(52px,9vw,110px);line-height:.88;margin:0}
+.lead{color:var(--ink-2);max-width:560px;margin:14px 0 0}
+.steps{display:grid;gap:34px;margin-top:40px}
+.step h2{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;font-size:20px;font-weight:600}
+.step h2 b{font-family:var(--f-head);font-weight:400;color:var(--pink);font-size:28px;line-height:1}
+.fields{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+label{display:grid;gap:6px}
+label span{color:var(--mute)}
+input[type=text],input[type=date],select{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;background:#f6eee4}
+input:focus,select:focus{border-color:var(--ink);outline:none}
+.drop{display:grid;place-items:center;gap:8px;text-align:center;padding:36px 16px;border:2px dashed var(--line);border-radius:16px;background:#f6eee4;transition:border-color .2s,background .2s}
+.drop.over{border-color:var(--pink);background:#f9e9ef}
+.drop p{margin:0;color:var(--mute)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);font-weight:600}
+.btn:hover{background:var(--pink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.status{margin:12px 0 0;color:var(--mute);font-variant-numeric:tabular-nums}
+.status.warn{color:var(--warn)}
+.sheet{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));margin-top:16px}
+.ph{position:relative;aspect-ratio:1;background:var(--paper-2);border-radius:6px;overflow:hidden;border:0;padding:0}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph.cover{outline:3px solid var(--pink);outline-offset:2px}
+.ph .tag{position:absolute;left:6px;top:6px;background:var(--pink);color:#fff;padding:3px 7px;border-radius:999px}
+.ph .x{position:absolute;right:6px;top:6px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(26,25,18,.6);color:#fff;font-size:16px;line-height:1;display:grid;place-items:center;opacity:0;transition:opacity .15s}
+.ph:hover .x,.ph:focus-within .x{opacity:1}
+@media (hover:none){.ph .x{opacity:1}}
+.ph.wait{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.ph.wait{animation:none}}
+.hint{color:var(--mute);margin:10px 0 0}
+.track{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:14px;max-width:420px}
+.fill{height:100%;width:0;background:var(--pink);transition:width .2s}
+.done{margin-top:20px;padding:22px;border-radius:16px;background:#f6eee4;border:1.5px solid var(--line)}
+.done ol{margin:10px 0 0;padding-left:20px;display:grid;gap:8px}
+.done code{background:var(--paper-2);padding:2px 8px;border-radius:6px;font-size:14px;user-select:all}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="/">Teo Photos</a>
+  <span class="up">Gallery builder</span>
+</header>
+<main>
+  <h1>New gallery</h1>
+  <p class="lead">Type the client name, choose the photos and a cover, then press “Create gallery”. Nothing is uploaded here: the gallery is put together right in your browser, and the originals stay in 100% quality.</p>
+
+  <div class="steps">
+    <section class="step">
+      <h2><b>1</b> About the shoot</h2>
+      <div class="fields">
+        <label><span>Client name *</span><input id="client" type="text" placeholder="Anna" autocomplete="off"></label>
+        <label><span>Shoot title (optional)</span><input id="title" type="text" placeholder="Autumn session" autocomplete="off"></label>
+        <label><span>Date</span><input id="date" type="date"></label>
+        <label><span>Gallery language for the client</span>
+          <select id="lang"><option value="en">English</option><option value="uk">Українська</option><option value="es">Español</option></select>
+        </label>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><b>2</b> Photos and cover</h2>
+      <div class="drop" id="drop">
+        <p>Drop photos here or</p>
+        <button class="btn ghost" id="pick" type="button">Choose photos</button>
+        <input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <p class="up">JPG, PNG, WEBP · any size · up to about 490 photos</p>
+      </div>
+      <p class="status" id="photoStatus" hidden></p>
+      <p class="hint" id="coverHint" hidden>Click a photo to make it the cover.</p>
+      <div class="sheet" id="sheet"></div>
+    </section>
+
+    <section class="step">
+      <h2><b>3</b> Create</h2>
+      <button class="btn" id="make" type="button" disabled>Create gallery</button>
+      <div id="prog" hidden><div class="track"><div class="fill" id="fill"></div></div><p class="status" id="progText"></p></div>
+      <div class="done" id="done" hidden>
+        <strong>Done! <span id="zipName"></span> has downloaded.</strong>
+        <ol>
+          <li>Open <a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages" target="_blank" rel="noopener">Cloudflare → Workers &amp; Pages → Create → Pages → Upload assets</a>.</li>
+          <li>Project name: <code id="slug"></code> <button class="btn ghost" id="copy" type="button" style="min-height:34px;padding:0 14px">Copy</button></li>
+          <li>Drop the ZIP there and click <b>Deploy</b>.</li>
+          <li>Link for the client: <code id="link"></code></li>
+        </ol>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+// Cloudflare Pages: 25 MiB per file, 1000 files per drag-and-drop upload.
+// Bigger originals are split into 24 MiB parts; the gallery joins them back byte for byte.
+const CHUNK = 24 * 1024 * 1024, MAX_FILE = 500 * 1024 * 1024, MAX_FILES = 1000, PREVIEW = 1800;
+const partsOf = size => size > CHUNK ? Math.ceil(size / CHUNK) : 0;
+const filesFor = list => 3 + list.reduce((n, p) => n + 1 + Math.max(1, partsOf(p.file.size)), 0);
+let photos = [], cover = null, queue = Promise.resolve();
+
+$('date').valueAsDate = new Date();
+const mb = n => n >= 1073741824 ? (n/1073741824).toFixed(1) + ' GB' : (n/1048576).toFixed(1) + ' MB';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const UA = {а:'a',б:'b',в:'v',г:'h',ґ:'g',д:'d',е:'e',є:'ie',ж:'zh',з:'z',и:'y',і:'i',ї:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ь:'',ю:'iu',я:'ia',ё:'e',ы:'y',э:'e',ъ:''};
+const slugify = t => ([...t.toLowerCase()].map(c => UA[c] ?? c).join('').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,30)) || 'client';
+const natural = (a, b) => a.name.localeCompare(b.name, undefined, {numeric:true, sensitivity:'base'});
+
+function status(text, warn){ const s = $('photoStatus'); s.hidden = !text; s.textContent = text; s.classList.toggle('warn', !!warn); }
+function refresh(){
+  $('make').disabled = !photos.length || photos.some(p => !p.preview) || !$('client').value.trim();
+  $('coverHint').hidden = photos.length < 2;
+  const total = photos.reduce((n, p) => n + p.file.size, 0);
+  const pending = photos.filter(p => !p.preview).length;
+  if (photos.length) status(`${photos.length} photos · ${mb(total)}` + (pending ? ` · making previews, ${pending} left` : ''));
+}
+$('client').addEventListener('input', refresh);
+
+function render(){
+  const sheet = $('sheet'); sheet.innerHTML = '';
+  photos.forEach((p, i) => {
+    const b = document.createElement('div');
+    b.className = 'ph' + (p === cover ? ' cover' : '') + (p.preview ? '' : ' wait');
+    b.tabIndex = 0; b.setAttribute('role', 'button'); b.title = p.name;
+    if (p.url) b.innerHTML = `<img src="${p.url}" alt="">`;
+    if (p === cover) b.insertAdjacentHTML('beforeend', '<span class="tag up">Cover</span>');
+    const x = document.createElement('button'); x.className = 'x'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + p.name);
+    x.onclick = e => { e.stopPropagation(); if (p.url) URL.revokeObjectURL(p.url); photos.splice(i, 1); if (p === cover) cover = photos[0] || null; render(); refresh(); };
+    b.appendChild(x);
+    const choose = () => { cover = p; render(); };
+    b.onclick = choose; b.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(); } };
+    sheet.appendChild(b);
+  });
+}
+
+async function makePreview(p){
+  try {
+    const bmp = await createImageBitmap(p.file);
+    const k = Math.min(1, PREVIEW / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * k), h = Math.round(bmp.height * k);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d'); ctx.imageSmoothingQuality = 'high'; ctx.drawImage(bmp, 0, 0, w, h);
+    bmp.close();
+    p.preview = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.84));
+    p.w = w; p.h = h; p.url = URL.createObjectURL(p.preview);
+  } catch (e) {
+    console.error(e); p.failed = true;
+  }
+}
+
+function addFiles(list){
+  const skipped = [];
+  const names = new Set(photos.map(p => p.name));
+  const fresh = [];
+  for (const f of list){
+    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { skipped.push(`${f.name} (not a photo)`); continue; }
+    if (f.size > MAX_FILE) { skipped.push(`${f.name} (over 500 MB)`); continue; }
+    if (filesFor([...photos, ...fresh, {file: f}]) > MAX_FILES) { skipped.push(`${f.name} (gallery is full)`); continue; }
+    let name = f.name, n = 2;
+    while (names.has(name)) name = f.name.replace(/(\.[^.]+)?$/, `-${n++}$1`);
+    names.add(name);
+    fresh.push({file: f, name});
+  }
+  photos.push(...fresh); photos.sort(natural);
+  if (!cover) cover = photos[0] || null;
+  render(); refresh();
+  // two at a time keeps memory low on big shoots
+  const work = fresh.slice();
+  const worker = async () => { while (work.length) { const p = work.shift(); await makePreview(p); if (p.failed) skipped.push(`${p.name} (could not be opened)`); render(); refresh(); } };
+  queue = queue.then(() => Promise.all([worker(), worker()])).then(() => {
+    photos = photos.filter(p => !p.failed); if (cover && cover.failed) cover = photos[0] || null; render(); refresh();
+    if (skipped.length) status(`${$('photoStatus').textContent} · skipped: ${skipped.join(', ')}`, true);
+  });
+}
+$('pick').onclick = () => $('files').click();
+$('files').onchange = e => { addFiles([...e.target.files]); e.target.value = ''; };
+const drop = $('drop');
+['dragenter','dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => addFiles([...e.dataTransfer.files]));
+
+// ---------- ZIP writer (store only: files go in exactly as they are; ZIP64 above 4 GB) ----------
+const CRC = new Uint32Array(256).map((_, n) => { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
+async function makeZip(entries, onBytes = () => {}, force64 = false){
+  const enc = new TextEncoder(), parts = [], central = [];
+  const total = entries.reduce((n, e) => n + e.blob.size + 30 + 20 + e.path.length * 3, 0);
+  const z64 = force64 || total >= 0xFFFFFFFF || entries.length >= 0xFFFF;
+  const now = new Date();
+  const tm = (now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1), dt = ((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate();
+  const ver = z64 ? 45 : 20, MAX32 = 0xFFFFFFFF;
+  let offset = 0;
+  for (const {path, blob} of entries){
+    const name = enc.encode(path), size = blob.size;
+    let crc = 0xFFFFFFFF;
+    const rd = blob.stream().getReader();
+    for (;;){ const {done, value} = await rd.read(); if (done) break; for (let i = 0; i < value.length; i++) crc = CRC[(crc ^ value[i]) & 255] ^ (crc >>> 8); onBytes(value.length); }
+    crc = (crc ^ 0xFFFFFFFF) >>> 0;
+    const lx = z64 ? 20 : 0;
+    const lh = new DataView(new ArrayBuffer(30 + lx));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, ver, true); lh.setUint16(6, 0x0800, true);
+    lh.setUint16(10, tm, true); lh.setUint16(12, dt, true); lh.setUint32(14, crc, true);
+    lh.setUint32(18, z64 ? MAX32 : size, true); lh.setUint32(22, z64 ? MAX32 : size, true);
+    lh.setUint16(26, name.length, true); lh.setUint16(28, lx, true);
+    const cx = z64 ? 28 : 0;
+    const ch = new DataView(new ArrayBuffer(46 + cx));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, ver, true); ch.setUint16(6, ver, true); ch.setUint16(8, 0x0800, true);
+    ch.setUint16(12, tm, true); ch.setUint16(14, dt, true); ch.setUint32(16, crc, true);
+    ch.setUint32(20, z64 ? MAX32 : size, true); ch.setUint32(24, z64 ? MAX32 : size, true);
+    ch.setUint16(28, name.length, true); ch.setUint16(30, cx, true); ch.setUint32(42, z64 ? MAX32 : offset, true);
+    if (z64){
+      // local extra: sizes; central extra: sizes + offset (both after the fixed header)
+      lh.setUint16(30, 1, true); lh.setUint16(32, 16, true); lh.setBigUint64(34, BigInt(size), true); lh.setBigUint64(42, BigInt(size), true);
+    }
+    const cExtra = new DataView(new ArrayBuffer(cx));
+    if (z64){ cExtra.setUint16(0, 1, true); cExtra.setUint16(2, 24, true); cExtra.setBigUint64(4, BigInt(size), true); cExtra.setBigUint64(12, BigInt(size), true); cExtra.setBigUint64(20, BigInt(offset), true); }
+    const lhHead = new DataView(lh.buffer, 0, 30), lhExtra = new DataView(lh.buffer, 30, lx);
+    parts.push(lhHead, name, lhExtra, blob);
+    central.push(new DataView(ch.buffer, 0, 46), name, cExtra);
+    offset += 30 + name.length + lx + size;
+  }
+  const cdSize = central.reduce((n, x) => n + x.byteLength, 0), cdStart = offset, n = entries.length;
+  const tail = [];
+  if (z64){
+    const r = new DataView(new ArrayBuffer(56));
+    r.setUint32(0, 0x06064b50, true); r.setBigUint64(4, 44n, true); r.setUint16(12, 45, true); r.setUint16(14, 45, true);
+    r.setBigUint64(24, BigInt(n), true); r.setBigUint64(32, BigInt(n), true); r.setBigUint64(40, BigInt(cdSize), true); r.setBigUint64(48, BigInt(cdStart), true);
+    const l = new DataView(new ArrayBuffer(20));
+    l.setUint32(0, 0x07064b50, true); l.setBigUint64(8, BigInt(cdStart + cdSize), true); l.setUint32(16, 1, true);
+    tail.push(r, l);
+  }
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, z64 ? 0xFFFF : n, true); end.setUint16(10, z64 ? 0xFFFF : n, true);
+  end.setUint32(12, z64 ? MAX32 : cdSize, true); end.setUint32(16, z64 ? MAX32 : cdStart, true);
+  tail.push(end);
+  return new Blob([...parts, ...central, ...tail], {type:'application/zip'});
+}
+
+$('make').onclick = async () => {
+  const client = $('client').value.trim(); if (!client) return $('client').focus();
+  const b = $('make'); b.disabled = true; $('done').hidden = true; $('prog').hidden = false;
+  try {
+    const tpl = await (await fetch('template.html', {cache:'no-cache'})).text();
+    const [y, m, d] = ($('date').value || new Date().toISOString().slice(0,10)).split('-');
+    const date = `${d}.${m}.${y}`, title = $('title').value.trim(), lang = $('lang').value;
+    const slug = `${slugify(client)}-${[...crypto.getRandomValues(new Uint8Array(3))].map(x => x.toString(16).padStart(2,'0')).join('')}`;
+    const items = photos.map((p, i) => {
+      const stem = 'p/' + String(i + 1).padStart(3, '0') + '.jpg';
+      const it = {n: p.name, o: 'o/' + encodeURIComponent(p.name), p: stem, t: stem, w: p.w, h: p.h, s: p.file.size};
+      const k = partsOf(p.file.size); if (k) it.k = k;
+      return it;
+    });
+    const total = items.reduce((n, it) => n + it.s, 0);
+    const coverItem = items[Math.max(0, photos.indexOf(cover))];
+    const grid = items.map((it, k) => `<a class="tile" href="${it.p}" data-i="${k}" style="aspect-ratio:${it.w}/${it.h}"><img src="${it.t}" width="${it.w}" height="${it.h}" loading="lazy" decoding="async" alt="${esc(it.n)}"></a>`).join('\n');
+    const data = JSON.stringify({client, title, date, lang, zip: slug + '.zip', total, items}).replace(/<\//g, '<\\/');
+    const repl = {'{{LANG}}': lang, '{{CLIENT}}': esc(client), '{{TITLE}}': esc(title), '{{DATE}}': esc(date), '{{COUNT}}': String(items.length),
+                  '{{TOTAL}}': mb(total), '{{COVER}}': coverItem.p, '{{GRID}}': grid, '{{DATA}}': data};
+    let page = tpl; for (const [k, v] of Object.entries(repl)) page = page.split(k).join(v);
+    const headers = '/*\n  X-Robots-Tag: noindex, nofollow\n  Referrer-Policy: no-referrer\n/o/*\n  Cache-Control: public, max-age=31536000, immutable\n/p/*\n  Cache-Control: public, max-age=31536000, immutable\n';
+    const entries = [
+      {path: 'index.html', blob: new Blob([page], {type:'text/html'})},
+      {path: 'robots.txt', blob: new Blob(['User-agent: *\nDisallow: /\n'])},
+      {path: '_headers', blob: new Blob([headers])},
+      ...photos.map((p, i) => ({path: items[i].p, blob: p.preview})),
+      ...photos.flatMap(p => {
+        const k = partsOf(p.file.size);
+        if (!k) return [{path: 'o/' + p.name, blob: p.file}];
+        return Array.from({length: k}, (_, j) => ({path: `o/${p.name}.part${j + 1}`, blob: p.file.slice(j * CHUNK, (j + 1) * CHUNK)}));
+      }),
+    ];
+    const all = entries.reduce((n, e) => n + e.blob.size, 0); let got = 0;
+    const zip = await makeZip(entries, n => { got += n; $('fill').style.width = (got / all * 100).toFixed(1) + '%'; $('progText').textContent = `Packing: ${mb(got)} of ${mb(all)}`; });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(zip); a.download = slug + '.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 600000);
+    $('zipName').textContent = slug + '.zip'; $('slug').textContent = slug; $('link').textContent = `https://${slug}.pages.dev`;
+    $('progText').textContent = `Done: ${items.length} photos, ${mb(total)}`; $('done').hidden = false;
+  } catch (e) {
+    console.error(e); $('progText').textContent = 'Something went wrong. Reload the page and try again.';
+  }
+  b.disabled = false;
+};
+$('copy').onclick = async () => { try { await navigator.clipboard.writeText($('slug').textContent); $('copy').textContent = 'Copied'; } catch { getSelection().selectAllChildren($('slug')); } };
+</script>
+</body>
+</html>
