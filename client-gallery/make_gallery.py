@@ -30,7 +30,7 @@ Image.MAX_IMAGE_PIXELS = None
 HERE = Path(__file__).resolve().parent
 PHOTO_EXT = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
 MAX_FILE = 25 * 1024 * 1024  # Cloudflare Pages limit per file
-PREVIEW, THUMB = 2400, 900
+PREVIEW = 1800  # one preview per photo, used in the grid and the viewer
 
 UA = {"а": "a", "б": "b", "в": "v", "г": "h", "ґ": "g", "д": "d", "е": "e", "є": "ie", "ж": "zh", "з": "z",
       "и": "y", "і": "i", "ї": "i", "й": "i", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o", "п": "p",
@@ -89,7 +89,7 @@ def main():
     out = Path(a.out).expanduser() / slug
     if out.exists():
         shutil.rmtree(out)
-    for d in ("o", "p", "t"):
+    for d in ("o", "p"):
         (out / d).mkdir(parents=True)
 
     items, total = [], 0
@@ -103,11 +103,10 @@ def main():
                 im = im.convert("RGB")
             stem = f"{i:03d}.jpg"
             save_small(im, out / "p" / stem, PREVIEW, icc)
-            save_small(im, out / "t" / stem, THUMB, icc)
             w, h = im.size
         size = p.stat().st_size
         total += size
-        items.append({"n": p.name, "o": "o/" + quote(p.name), "p": "p/" + stem, "t": "t/" + stem,
+        items.append({"n": p.name, "o": "o/" + quote(p.name), "p": "p/" + stem, "t": "p/" + stem,
                       "w": w, "h": h, "s": size})
 
     cover = next((it for it in items if it["n"] == a.cover), items[0])
@@ -139,7 +138,7 @@ def main():
         "/*\n  X-Robots-Tag: noindex, nofollow\n  Referrer-Policy: no-referrer\n"
         "/o/*\n  Cache-Control: public, max-age=31536000, immutable\n"
         "/p/*\n  Cache-Control: public, max-age=31536000, immutable\n"
-        "/t/*\n  Cache-Control: public, max-age=31536000, immutable\n")
+        )
 
     print(f"\nDone: {len(items)} photos, {human(total)} of originals")
     print(f"Folder:  {out}")
