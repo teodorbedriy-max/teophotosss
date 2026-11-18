@@ -1,9 +1,0 @@
-/*
-  X-Robots-Tag: noindex, nofollow
-  Referrer-Policy: no-referrer
-/o/*
-  Cache-Control: public, max-age=31536000, immutable
-/p/*
-  Cache-Control: public, max-age=31536000, immutable
-/t/*
-  Cache-Control: public, max-age=31536000, immutable
