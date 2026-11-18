@@ -66,10 +66,10 @@ def natural_key(p):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("source", help="folder with the edited photos")
-    ap.add_argument("--client", required=True, help='client name shown on the page, e.g. "Анна"')
-    ap.add_argument("--title", default="", help='optional shoot title, e.g. "Осіння сесія"')
+    ap.add_argument("--client", required=True, help='client name shown on the page, e.g. "Anna"')
+    ap.add_argument("--title", default="", help='optional shoot title, e.g. "Autumn session"')
     ap.add_argument("--date", default="", help="date shown on the page (default: today)")
-    ap.add_argument("--lang", choices=("uk", "en", "es"), default="uk", help="page language (default uk)")
+    ap.add_argument("--lang", choices=("uk", "en", "es"), default="en", help="page language (default en)")
     ap.add_argument("--cover", default="", help="file name of the cover photo (default: first photo)")
     ap.add_argument("--slug", default="", help="folder / project name (default: client name + random code)")
     ap.add_argument("--out", default=str(HERE / "out"), help="where to put the gallery folder")

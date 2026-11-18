@@ -100,35 +100,35 @@ body.lock{overflow:hidden}
 <body>
 <header class="bar">
   <a class="logo" href="https://teophotosss.netlify.app/">Teo Photos</a>
-  <span class="up" data-t="private">Приватна галерея</span>
+  <span class="up" data-t="private">Private gallery</span>
 </header>
 
 <main>
 <section class="hero">
   <div class="txt">
-    <p class="for" data-t="for">твої фото,</p>
+    <p class="for" data-t="for">your photos,</p>
     <h1 class="name">{{CLIENT}}</h1>
     <p class="title" id="title">{{TITLE}}</p>
     <div class="meta up">
       <span>{{DATE}}</span>
-      <span><b>{{COUNT}}</b> <span data-t="photos" style="all:unset">фото</span></span>
+      <span><b>{{COUNT}}</b> <span data-t="photos" style="all:unset">photos</span></span>
       <span>{{TOTAL}}</span>
     </div>
     <div class="acts">
       <button class="btn" id="zipBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
-        <span data-t="all">Завантажити все</span>
+        <span data-t="all">Download all</span>
       </button>
       <button class="btn ghost" id="shareBtn" type="button" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
-        <span data-t="toPhotos">Зберегти у «Фото»</span>
+        <span data-t="toPhotos">Save to Photos</span>
       </button>
     </div>
     <div class="prog" id="prog" hidden>
       <div class="track"><div class="fill" id="fill"></div></div>
       <p id="progText"></p>
     </div>
-    <p class="note" data-t="note">Усі файли в оригінальній якості, без стиснення. Натисни на фото, щоб відкрити його великим і завантажити окремо.</p>
+    <p class="note" data-t="note">All files are in original quality, uncompressed. Tap a photo to view it large and download it on its own.</p>
   </div>
   <img class="cover" src="{{COVER}}" alt="">
 </section>
@@ -166,7 +166,7 @@ body.lock{overflow:hidden}
 <script id="data" type="application/json">{{DATA}}</script>
 <script type="module">
 const D = JSON.parse(document.getElementById('data').textContent);
-const T = {
+const T_ALL = {
   uk:{private:'Приватна галерея',for:'твої фото,',photos:'фото',all:'Завантажити все',toPhotos:'Зберегти у «Фото»',
       note:'Усі файли в оригінальній якості, без стиснення. Натисни на фото, щоб відкрити його великим і завантажити окремо.',
       original:'Оригінал',preparing:'Готую файли…',zipping:'Пакую архів…',ready:'Готово! Файл ZIP завантажується.',
@@ -179,7 +179,8 @@ const T = {
       note:'Todos los archivos en calidad original, sin compresión. Toca una foto para verla en grande y descargarla.',
       original:'Original',preparing:'Preparando archivos…',zipping:'Creando el ZIP…',ready:'¡Listo! Tu ZIP se está descargando.',
       tapSave:'Toca otra vez para guardar',saveN:n=>`Guardar ${n} fotos`,save1:'Guardar en Fotos',failed:'No ha funcionado. Prueba «Descargar todo».',}
-}[D.lang] || {};
+};
+const T_EN = T_ALL.en; const T = T_ALL[D.lang] || T_EN;
 document.querySelectorAll('[data-t]').forEach(el => { const v = T[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
 if (!D.title) document.getElementById('title').hidden = true;
 

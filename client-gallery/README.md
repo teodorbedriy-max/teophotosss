@@ -1,42 +1,42 @@
-# Галереї для клієнтів
+# Client galleries
 
-Окрема приватна сторінка для кожної фотосесії: клієнт гортає фото, відкриває їх великими і завантажує
-**оригінали в 100% якості** (файли копіюються байт у байт, нічого не стискається). Є кнопка
-«Завантажити все» (один ZIP), а на телефоні ще «Зберегти у Фото».
+A private page for each photoshoot: the client scrolls through the photos, opens them large and downloads
+the **originals in 100% quality** (files are copied byte for byte, nothing is compressed). There is a
+"Download all" button (one ZIP) and, on phones, "Save to Photos".
 
-Хостинг: **Cloudflare Pages**, безкоштовно, без банківської картки, трафік не обмежений.
-Кожен клієнт отримує своє посилання, наприклад `https://anna-3f9a1c.pages.dev`.
-Сторінки закриті від Google (noindex), а в назві є випадковий код, тож знайти їх можна лише за посиланням.
+Hosting: **Cloudflare Pages**, free, no bank card, unlimited traffic.
+Each client gets their own link, for example `https://anna-3f9a1c.pages.dev`.
+Pages are hidden from Google (noindex) and the name has a random code, so they can only be found through the link.
 
-## Як зробити нову галерею
+## Making a new gallery
 
-1. Відкрий конструктор: **teophotosss.netlify.app/client-gallery/**
-2. Впиши ім'я клієнта (і, якщо хочеш, назву сесії й дату), перетягни фото, натисни на фото, яке буде заставкою.
-3. Натисни **Створити галерею**: завантажиться ZIP. Фото нікуди не відправляються, все збирається у твоєму браузері.
-4. У Cloudflare: **Workers & Pages → Create → Pages → Upload assets**, назва проєкту як підказує конструктор,
-   перетягни ZIP, **Deploy**. Якщо Cloudflare не приймає великий ZIP, розпакуй його і перетягни папку.
-5. Надішли клієнту посилання `https://<назва>.pages.dev`.
+1. Open the builder: **teophotosss.netlify.app/client-gallery/**
+2. Type the client name (and, if you like, a shoot title and date), drop in the photos, click the one that should be the cover.
+3. Press **Create gallery**: a ZIP downloads. The photos are not uploaded anywhere; everything is put together in your browser.
+4. In Cloudflare: **Workers & Pages → Create → Pages → Upload assets**, use the project name the builder suggests,
+   drop in the ZIP, **Deploy**. If Cloudflare refuses a large ZIP, unzip it and drop the folder instead.
+5. Send the client the link `https://<name>.pages.dev`.
 
-Перший раз треба безкоштовно зареєструватися на dash.cloudflare.com (лише пошта, без картки).
+The first time, sign up for free at dash.cloudflare.com (email only, no card).
 
-## Вручну, скриптом
+## By hand, with the script
 
-**Зібрати галерею** (потрібні Python 3 і `pip3 install pillow`):
+**Build a gallery** (needs Python 3 and `pip3 install pillow`):
 
 ```
-python3 client-gallery/make_gallery.py ~/Downloads/anna --client "Анна" --title "Осіння сесія" --date "10.11.2026"
+python3 client-gallery/make_gallery.py ~/Downloads/anna --client "Anna" --title "Autumn session" --date "10.11.2026"
 ```
 
-Готова папка з'явиться в `client-gallery/out/anna-xxxxxx/`. Мова сторінки: `--lang uk` (типово), `en` або `es`.
-Обкладинка: `--cover DSC09716_edit.jpg` (типово перше фото).
+The folder appears in `client-gallery/out/anna-xxxxxx/`. Page language: `--lang en` (default), `uk` or `es`.
+Cover: `--cover DSC09716_edit.jpg` (default: the first photo).
 
-Далі так само, як у кроці 4 вище, тільки перетягуєш папку.
+Then do step 4 above, dropping in the folder.
 
-Видалити стару сесію: відкрий проєкт у Cloudflare → Settings → Delete project.
+To delete an old shoot: open the project in Cloudflare → Settings → Delete project.
 
-## Обмеження
+## Limits
 
-- Один файл до 25 МБ (ліміт Cloudflare Pages). Фото з камери вміщаються; більші файли й відео скрипт пропускає і пише про це.
-- Перетягуванням можна викласти до 1000 файлів, це до 490 фото на галерею (кожне фото = оригінал + 1 прев'ю).
-  Для більших сесій: `npx wrangler pages deploy client-gallery/out/<назва> --project-name <назва>`.
-- ZIP збирається прямо в браузері клієнта, тому на телефоні для великих сесій краще кнопка «Зберегти у Фото» або завантаження по одному.
+- One file up to 25 MB (Cloudflare Pages limit). Camera photos fit; larger files and videos are skipped with a note.
+- Drag-and-drop takes up to 1000 files, which is up to 490 photos per gallery (each photo = original + 1 preview).
+  For bigger shoots: `npx wrangler pages deploy client-gallery/out/<name> --project-name <name>`.
+- The "Download all" ZIP is built in the client's browser, so on phones big shoots are better saved with "Save to Photos" or one by one.

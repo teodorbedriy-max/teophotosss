@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Нова галерея · Teo Photos</title>
+<title>New Gallery · Teo Photos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Ms+Madi&display=swap" rel="stylesheet">
@@ -68,49 +68,49 @@ input:focus,select:focus{border-color:var(--ink);outline:none}
 <body>
 <header class="bar">
   <a class="logo" href="/">Teo Photos</a>
-  <span class="up">Конструктор галерей</span>
+  <span class="up">Gallery builder</span>
 </header>
 <main>
-  <h1>Нова галерея</h1>
-  <p class="lead">Впиши ім'я, вибери фото і заставку, натисни «Створити». Фото нікуди не завантажуються: усе збирається прямо на твоєму комп'ютері, оригінали залишаються в 100% якості.</p>
+  <h1>New gallery</h1>
+  <p class="lead">Type the client name, choose the photos and a cover, then press “Create gallery”. Nothing is uploaded here: the gallery is put together right in your browser, and the originals stay in 100% quality.</p>
 
   <div class="steps">
     <section class="step">
-      <h2><b>1</b> Про сесію</h2>
+      <h2><b>1</b> About the shoot</h2>
       <div class="fields">
-        <label><span>Ім'я клієнта *</span><input id="client" type="text" placeholder="Анна" autocomplete="off"></label>
-        <label><span>Назва сесії (необов'язково)</span><input id="title" type="text" placeholder="Осіння сесія" autocomplete="off"></label>
-        <label><span>Дата</span><input id="date" type="date"></label>
-        <label><span>Мова сторінки для клієнта</span>
-          <select id="lang"><option value="uk">Українська</option><option value="en">English</option><option value="es">Español</option></select>
+        <label><span>Client name *</span><input id="client" type="text" placeholder="Anna" autocomplete="off"></label>
+        <label><span>Shoot title (optional)</span><input id="title" type="text" placeholder="Autumn session" autocomplete="off"></label>
+        <label><span>Date</span><input id="date" type="date"></label>
+        <label><span>Gallery language for the client</span>
+          <select id="lang"><option value="en">English</option><option value="uk">Українська</option><option value="es">Español</option></select>
         </label>
       </div>
     </section>
 
     <section class="step">
-      <h2><b>2</b> Фото і заставка</h2>
+      <h2><b>2</b> Photos and cover</h2>
       <div class="drop" id="drop">
-        <p>Перетягни сюди фото або</p>
-        <button class="btn ghost" id="pick" type="button">Вибрати фото</button>
+        <p>Drop photos here or</p>
+        <button class="btn ghost" id="pick" type="button">Choose photos</button>
         <input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
-        <p class="up">JPG, PNG, WEBP · до 25 МБ кожне · до 490 фото</p>
+        <p class="up">JPG, PNG, WEBP · up to 25 MB each · up to 490 photos</p>
       </div>
       <p class="status" id="photoStatus" hidden></p>
-      <p class="hint" id="coverHint" hidden>Натисни на фото, щоб зробити його заставкою.</p>
+      <p class="hint" id="coverHint" hidden>Click a photo to make it the cover.</p>
       <div class="sheet" id="sheet"></div>
     </section>
 
     <section class="step">
-      <h2><b>3</b> Створити</h2>
-      <button class="btn" id="make" type="button" disabled>Створити галерею</button>
+      <h2><b>3</b> Create</h2>
+      <button class="btn" id="make" type="button" disabled>Create gallery</button>
       <div id="prog" hidden><div class="track"><div class="fill" id="fill"></div></div><p class="status" id="progText"></p></div>
       <div class="done" id="done" hidden>
-        <strong>Готово! Файл <span id="zipName"></span> завантажився.</strong>
+        <strong>Done! <span id="zipName"></span> has downloaded.</strong>
         <ol>
-          <li>Відкрий <a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages" target="_blank" rel="noopener">Cloudflare → Workers &amp; Pages → Create → Pages → Upload assets</a>.</li>
-          <li>Назва проєкту: <code id="slug"></code> <button class="btn ghost" id="copy" type="button" style="min-height:34px;padding:0 14px">Копіювати</button></li>
-          <li>Перетягни туди ZIP і натисни <b>Deploy</b>.</li>
-          <li>Посилання для клієнта: <code id="link"></code></li>
+          <li>Open <a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages" target="_blank" rel="noopener">Cloudflare → Workers &amp; Pages → Create → Pages → Upload assets</a>.</li>
+          <li>Project name: <code id="slug"></code> <button class="btn ghost" id="copy" type="button" style="min-height:34px;padding:0 14px">Copy</button></li>
+          <li>Drop the ZIP there and click <b>Deploy</b>.</li>
+          <li>Link for the client: <code id="link"></code></li>
         </ol>
       </div>
     </section>
@@ -135,7 +135,7 @@ function refresh(){
   $('coverHint').hidden = photos.length < 2;
   const total = photos.reduce((n, p) => n + p.file.size, 0);
   const pending = photos.filter(p => !p.preview).length;
-  if (photos.length) status(`${photos.length} фото · ${mb(total)}` + (pending ? ` · готую прев'ю, залишилось ${pending}` : ''));
+  if (photos.length) status(`${photos.length} photos · ${mb(total)}` + (pending ? ` · making previews, ${pending} left` : ''));
 }
 $('client').addEventListener('input', refresh);
 
@@ -146,8 +146,8 @@ function render(){
     b.className = 'ph' + (p === cover ? ' cover' : '') + (p.preview ? '' : ' wait');
     b.tabIndex = 0; b.setAttribute('role', 'button'); b.title = p.name;
     if (p.url) b.innerHTML = `<img src="${p.url}" alt="">`;
-    if (p === cover) b.insertAdjacentHTML('beforeend', '<span class="tag up">Заставка</span>');
-    const x = document.createElement('button'); x.className = 'x'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Прибрати ' + p.name);
+    if (p === cover) b.insertAdjacentHTML('beforeend', '<span class="tag up">Cover</span>');
+    const x = document.createElement('button'); x.className = 'x'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + p.name);
     x.onclick = e => { e.stopPropagation(); if (p.url) URL.revokeObjectURL(p.url); photos.splice(i, 1); if (p === cover) cover = photos[0] || null; render(); refresh(); };
     b.appendChild(x);
     const choose = () => { cover = p; render(); };
@@ -176,9 +176,9 @@ function addFiles(list){
   const names = new Set(photos.map(p => p.name));
   const fresh = [];
   for (const f of list){
-    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { skipped.push(`${f.name} (не фото)`); continue; }
-    if (f.size > MAX_FILE) { skipped.push(`${f.name} (більше 25 МБ)`); continue; }
-    if (photos.length + fresh.length >= MAX_PHOTOS) { skipped.push(`${f.name} (більше ${MAX_PHOTOS} фото)`); continue; }
+    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { skipped.push(`${f.name} (not a photo)`); continue; }
+    if (f.size > MAX_FILE) { skipped.push(`${f.name} (over 25 MB)`); continue; }
+    if (photos.length + fresh.length >= MAX_PHOTOS) { skipped.push(`${f.name} (over ${MAX_PHOTOS} photos)`); continue; }
     let name = f.name, n = 2;
     while (names.has(name)) name = f.name.replace(/(\.[^.]+)?$/, `-${n++}$1`);
     names.add(name);
@@ -189,10 +189,10 @@ function addFiles(list){
   render(); refresh();
   // two at a time keeps memory low on big shoots
   const work = fresh.slice();
-  const worker = async () => { while (work.length) { const p = work.shift(); await makePreview(p); if (p.failed) skipped.push(`${p.name} (не вдалося відкрити)`); render(); refresh(); } };
+  const worker = async () => { while (work.length) { const p = work.shift(); await makePreview(p); if (p.failed) skipped.push(`${p.name} (could not be opened)`); render(); refresh(); } };
   queue = queue.then(() => Promise.all([worker(), worker()])).then(() => {
     photos = photos.filter(p => !p.failed); if (cover && cover.failed) cover = photos[0] || null; render(); refresh();
-    if (skipped.length) status(`${$('photoStatus').textContent} · пропущено: ${skipped.join(', ')}`, true);
+    if (skipped.length) status(`${$('photoStatus').textContent} · skipped: ${skipped.join(', ')}`, true);
   });
 }
 $('pick').onclick = () => $('files').click();
@@ -263,18 +263,18 @@ $('make').onclick = async () => {
       ...photos.map((p, i) => ({path: 'o/' + p.name, blob: p.file})),
     ];
     const all = entries.reduce((n, e) => n + e.blob.size, 0); let got = 0;
-    const zip = await makeZip(entries, n => { got += n; $('fill').style.width = (got / all * 100).toFixed(1) + '%'; $('progText').textContent = `Пакую: ${mb(got)} з ${mb(all)}`; });
+    const zip = await makeZip(entries, n => { got += n; $('fill').style.width = (got / all * 100).toFixed(1) + '%'; $('progText').textContent = `Packing: ${mb(got)} of ${mb(all)}`; });
     const a = document.createElement('a'); a.href = URL.createObjectURL(zip); a.download = slug + '.zip';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 600000);
     $('zipName').textContent = slug + '.zip'; $('slug').textContent = slug; $('link').textContent = `https://${slug}.pages.dev`;
-    $('progText').textContent = `Готово: ${items.length} фото, ${mb(total)}`; $('done').hidden = false;
+    $('progText').textContent = `Done: ${items.length} photos, ${mb(total)}`; $('done').hidden = false;
   } catch (e) {
-    console.error(e); $('progText').textContent = e.message === 'too big' ? 'Забагато для однієї галереї (більше 4 ГБ). Розбий сесію на дві.' : 'Щось пішло не так. Онови сторінку і спробуй ще раз.';
+    console.error(e); $('progText').textContent = e.message === 'too big' ? 'Too big for one gallery (over 4 GB). Split the shoot into two.' : 'Something went wrong. Reload the page and try again.';
   }
   b.disabled = false;
 };
-$('copy').onclick = async () => { try { await navigator.clipboard.writeText($('slug').textContent); $('copy').textContent = 'Скопійовано'; } catch { getSelection().selectAllChildren($('slug')); } };
+$('copy').onclick = async () => { try { await navigator.clipboard.writeText($('slug').textContent); $('copy').textContent = 'Copied'; } catch { getSelection().selectAllChildren($('slug')); } };
 </script>
 </body>
 </html>
