@@ -93,7 +93,7 @@ input:focus,select:focus{border-color:var(--ink);outline:none}
         <p>Drop photos here or</p>
         <button class="btn ghost" id="pick" type="button">Choose photos</button>
         <input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
-        <p class="up">JPG, PNG, WEBP · up to 25 MB each · up to 490 photos</p>
+        <p class="up">JPG, PNG, WEBP · any size · up to about 490 photos</p>
       </div>
       <p class="status" id="photoStatus" hidden></p>
       <p class="hint" id="coverHint" hidden>Click a photo to make it the cover.</p>
@@ -119,7 +119,11 @@ input:focus,select:focus{border-color:var(--ink);outline:none}
 
 <script>
 const $ = id => document.getElementById(id);
-const MAX_FILE = 25 * 1024 * 1024, MAX_PHOTOS = 490, PREVIEW = 1800;
+// Cloudflare Pages: 25 MiB per file, 1000 files per drag-and-drop upload.
+// Bigger originals are split into 24 MiB parts; the gallery joins them back byte for byte.
+const CHUNK = 24 * 1024 * 1024, MAX_FILE = 500 * 1024 * 1024, MAX_FILES = 1000, PREVIEW = 1800;
+const partsOf = size => size > CHUNK ? Math.ceil(size / CHUNK) : 0;
+const filesFor = list => 3 + list.reduce((n, p) => n + 1 + Math.max(1, partsOf(p.file.size)), 0);
 let photos = [], cover = null, queue = Promise.resolve();
 
 $('date').valueAsDate = new Date();
@@ -177,8 +181,8 @@ function addFiles(list){
   const fresh = [];
   for (const f of list){
     if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { skipped.push(`${f.name} (not a photo)`); continue; }
-    if (f.size > MAX_FILE) { skipped.push(`${f.name} (over 25 MB)`); continue; }
-    if (photos.length + fresh.length >= MAX_PHOTOS) { skipped.push(`${f.name} (over ${MAX_PHOTOS} photos)`); continue; }
+    if (f.size > MAX_FILE) { skipped.push(`${f.name} (over 500 MB)`); continue; }
+    if (filesFor([...photos, ...fresh, {file: f}]) > MAX_FILES) { skipped.push(`${f.name} (gallery is full)`); continue; }
     let name = f.name, n = 2;
     while (names.has(name)) name = f.name.replace(/(\.[^.]+)?$/, `-${n++}$1`);
     names.add(name);
@@ -245,7 +249,9 @@ $('make').onclick = async () => {
     const slug = `${slugify(client)}-${[...crypto.getRandomValues(new Uint8Array(3))].map(x => x.toString(16).padStart(2,'0')).join('')}`;
     const items = photos.map((p, i) => {
       const stem = 'p/' + String(i + 1).padStart(3, '0') + '.jpg';
-      return {n: p.name, o: 'o/' + encodeURIComponent(p.name), p: stem, t: stem, w: p.w, h: p.h, s: p.file.size};
+      const it = {n: p.name, o: 'o/' + encodeURIComponent(p.name), p: stem, t: stem, w: p.w, h: p.h, s: p.file.size};
+      const k = partsOf(p.file.size); if (k) it.k = k;
+      return it;
     });
     const total = items.reduce((n, it) => n + it.s, 0);
     const coverItem = items[Math.max(0, photos.indexOf(cover))];
@@ -260,7 +266,11 @@ $('make').onclick = async () => {
       {path: 'robots.txt', blob: new Blob(['User-agent: *\nDisallow: /\n'])},
       {path: '_headers', blob: new Blob([headers])},
       ...photos.map((p, i) => ({path: items[i].p, blob: p.preview})),
-      ...photos.map((p, i) => ({path: 'o/' + p.name, blob: p.file})),
+      ...photos.flatMap(p => {
+        const k = partsOf(p.file.size);
+        if (!k) return [{path: 'o/' + p.name, blob: p.file}];
+        return Array.from({length: k}, (_, j) => ({path: `o/${p.name}.part${j + 1}`, blob: p.file.slice(j * CHUNK, (j + 1) * CHUNK)}));
+      }),
     ];
     const all = entries.reduce((n, e) => n + e.blob.size, 0); let got = 0;
     const zip = await makeZip(entries, n => { got += n; $('fill').style.width = (got / all * 100).toFixed(1) + '%'; $('progText').textContent = `Packing: ${mb(got)} of ${mb(all)}`; });

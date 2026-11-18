@@ -36,7 +36,9 @@ To delete an old shoot: open the project in Cloudflare → Settings → Delete p
 
 ## Limits
 
-- One file up to 25 MB (Cloudflare Pages limit). Camera photos fit; larger files and videos are skipped with a note.
-- Drag-and-drop takes up to 1000 files, which is up to 490 photos per gallery (each photo = original + 1 preview).
+- Cloudflare Pages takes files up to 25 MB, so photos over 24 MB are stored in parts and joined back in the client's browser:
+  the client still downloads one file, identical to your original. Videos are not supported yet.
+- Drag-and-drop takes up to 1000 files, which is up to about 490 photos per gallery (each photo = original + 1 preview,
+  and a photo over 24 MB counts as one file per 24 MB).
   For bigger shoots: `npx wrangler pages deploy client-gallery/out/<name> --project-name <name>`.
 - The "Download all" ZIP is built in the client's browser, so on phones big shoots are better saved with "Save to Photos" or one by one.

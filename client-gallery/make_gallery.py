@@ -29,7 +29,7 @@ except ImportError:
 Image.MAX_IMAGE_PIXELS = None
 HERE = Path(__file__).resolve().parent
 PHOTO_EXT = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-MAX_FILE = 25 * 1024 * 1024  # Cloudflare Pages limit per file
+CHUNK = 24 * 1024 * 1024  # Cloudflare Pages takes files up to 25 MiB; bigger originals go up in parts
 PREVIEW = 1800  # one preview per photo, used in the grid and the viewer
 
 UA = {"а": "a", "б": "b", "в": "v", "г": "h", "ґ": "g", "д": "d", "е": "e", "є": "ie", "ж": "zh", "з": "z",
@@ -80,8 +80,6 @@ def main():
                     and not p.name.startswith(".")), key=natural_key)
     skipped = [p for p in src.iterdir() if p.is_file() and p.suffix.lower() not in PHOTO_EXT
                and not p.name.startswith(".")]
-    too_big = [p for p in files if p.stat().st_size > MAX_FILE]
-    files = [p for p in files if p not in too_big]
     if not files:
         sys.exit(f"No photos found in {src}")
 
@@ -95,7 +93,14 @@ def main():
     items, total = [], 0
     for i, p in enumerate(files, 1):
         print(f"[{i}/{len(files)}] {p.name}", flush=True)
-        shutil.copy2(p, out / "o" / p.name)  # untouched original
+        size = p.stat().st_size
+        parts = -(-size // CHUNK) if size > CHUNK else 0
+        if parts:  # split; the gallery joins the parts back byte for byte
+            with open(p, "rb") as fh:
+                for j in range(parts):
+                    (out / "o" / f"{p.name}.part{j + 1}").write_bytes(fh.read(CHUNK))
+        else:
+            shutil.copy2(p, out / "o" / p.name)  # untouched original
         with Image.open(p) as im:
             icc = im.info.get("icc_profile")
             im = ImageOps.exif_transpose(im)
@@ -104,10 +109,11 @@ def main():
             stem = f"{i:03d}.jpg"
             save_small(im, out / "p" / stem, PREVIEW, icc)
             w, h = im.size
-        size = p.stat().st_size
         total += size
-        items.append({"n": p.name, "o": "o/" + quote(p.name), "p": "p/" + stem, "t": "p/" + stem,
-                      "w": w, "h": h, "s": size})
+        item = {"n": p.name, "o": "o/" + quote(p.name), "p": "p/" + stem, "t": "p/" + stem, "w": w, "h": h, "s": size}
+        if parts:
+            item["k"] = parts
+        items.append(item)
 
     cover = next((it for it in items if it["n"] == a.cover), items[0])
     date = a.date or dt.date.today().strftime("%d.%m.%Y")
@@ -143,8 +149,6 @@ def main():
     print(f"\nDone: {len(items)} photos, {human(total)} of originals")
     print(f"Folder:  {out}")
     print(f"Cloudflare Pages project name:  {slug}")
-    for p in too_big:
-        print(f"SKIPPED (over 25 MB, Cloudflare Pages limit): {p.name}")
     for p in skipped:
         print(f"SKIPPED (not a photo): {p.name}")
 
